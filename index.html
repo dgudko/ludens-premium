@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Premium Tokens</title>
+    <meta
+      name="description"
+      content="Покупка Premium Tokens для L2 Ludens. Введи аккаунт, выбери количество токенов и перейди к оплате."
+    />
+    <link rel="stylesheet" href="./assets/styles.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <main class="card" aria-labelledby="pageTitle">
+        <div class="heroArt" role="img" aria-label="L2 Ludens server artwork">
+          <div class="heroBadge">
+            <span class="sparkDot" aria-hidden="true"></span>
+            <strong>L2 Ludens</strong>
+            <span>Premium Tokens</span>
+          </div>
+        </div>
+        <header class="header">
+          <div class="titleRow">
+            <h1 id="pageTitle">Premium Tokens</h1>
+            <div class="spark" aria-hidden="true">
+              <span class="sparkDot"></span>
+              <span>pay.ludens.school</span>
+            </div>
+          </div>
+          <p class="subtitle">Токены начисляются на аккаунт. Проверь имя аккаунта.</p>
+        </header>
+
+        <div class="content">
+          <section class="panel" aria-label="Payment form">
+            <div class="field">
+              <label for="accountInput">Имя аккаунта</label>
+              <input
+                id="accountInput"
+                type="text"
+                inputmode="text"
+                autocomplete="username"
+                placeholder="MyAccount"
+                aria-describedby="accountHint"
+              />
+              <div id="accountHint" class="hint">
+                2–32 символа, только <span class="mono">A–Z 0–9 _</span>
+              </div>
+            </div>
+
+            <div class="field" style="margin-top: 16px">
+              <label for="tokensInput">Tokens</label>
+              <div class="row2">
+                <div class="tokensRow">
+                  <input
+                    id="tokensInput"
+                    type="number"
+                    inputmode="numeric"
+                    min="1"
+                    max="1000000"
+                    step="1"
+                    value="100"
+                  />
+                  <div class="sliderWrap">
+                    <input id="tokensRange" type="range" min="1" max="5000" step="1" value="100" />
+                  </div>
+                  <div class="hint">
+                    Сейчас: <strong id="tokensPretty">100</strong>
+                    <span class="small">(ползунок: 1–5 000, вручную: до 1 000 000)</span>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="currencySelect">Валюта</label>
+                  <select id="currencySelect" aria-label="Currency">
+                    <option value="UAH">UAH</option>
+                    <option value="EUR" disabled>EUR (soon)</option>
+                    <option value="USD" disabled>USD (soon)</option>
+                  </select>
+                  <div class="hint">Сумма будет показана на странице оплаты. Здесь выбираешь только количество.</div>
+                </div>
+              </div>
+
+              <div id="presets" class="presets" style="margin-top: 12px" aria-label="Token presets"></div>
+            </div>
+
+            <div id="errors" class="errors" role="alert" aria-live="polite" style="margin-top: 16px">
+              <div class="errorsTitle">Проверь поля</div>
+              <ul id="errorsList" class="errorsList"></ul>
+            </div>
+
+            <div class="actions" style="margin-top: 16px">
+              <button id="payBtn" class="btn" type="button">Оплатить</button>
+            </div>
+          </section>
+
+          <aside class="panel" aria-label="What happens next">
+            <h2 class="asideTitle">Как это работает</h2>
+            <ol class="steps">
+              <li>Имя аккаунта будет подставлено из игры — просто проверь.</li>
+              <li>Выбери количество токенов.</li>
+              <li>Нажми “Оплатить” — откроется страница Monobank.</li>
+              <li>После оплаты вернись в игру и обнови баланс.</li>
+            </ol>
+
+            <div class="badge" style="margin-top: 14px">
+              <strong>Важно</strong>
+              <span>Токены начисляются на указанный аккаунт. Проверь имя аккаунта.</span>
+            </div>
+
+            <p class="hint" style="margin: 10px 0 0">
+              После оплаты Monobank может вернуть на <span class="mono">thanks</span> даже если статус ещё
+              обрабатывается. Просто проверь баланс в игре.
+            </p>
+          </aside>
+        </div>
+      </main>
+    </div>
+
+    <script src="./assets/app.js" defer></script>
+  </body>
+</html>

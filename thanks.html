@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Payment — processing</title>
+    <meta name="description" content="Оплата обрабатывается. Проверь баланс в игре." />
+    <link rel="stylesheet" href="./assets/styles.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <main class="card" aria-labelledby="pageTitle">
+        <div class="heroArt" role="img" aria-label="L2 Ludens server artwork">
+          <div class="heroBadge">
+            <span class="sparkDot" aria-hidden="true"></span>
+            <strong>L2 Ludens</strong>
+            <span>Premium Tokens</span>
+          </div>
+        </div>
+        <header class="header">
+          <div class="titleRow">
+            <h1 id="pageTitle">Спасибо</h1>
+            <div class="spark" aria-hidden="true">
+              <span class="sparkDot"></span>
+              <span>pay.ludens.school</span>
+            </div>
+          </div>
+          <p class="subtitle">Оплата обрабатывается. Если всё прошло — токены начислятся в течение ~N минут.</p>
+        </header>
+
+        <div class="content" style="grid-template-columns: 1fr">
+          <section class="panel">
+            <h2 class="asideTitle">Что делать дальше</h2>
+            <ol class="steps">
+              <li>Вернись в игру.</li>
+              <li>Нажми <span class="mono">Refresh balance</span> (или перезайди).</li>
+              <li>Если токены не появились через ~N минут — попробуй ещё раз или напиши нам.</li>
+            </ol>
+
+            <div class="actions" style="margin-top: 16px">
+              <a class="btn" href="./">Вернуться на главную</a>
+            </div>
+
+            <p class="hint" style="margin: 14px 0 0">
+              Важно: Monobank может редиректить на эту страницу даже если статус не <span class="mono">success</span>.
+              Поэтому это экран “обрабатывается/проверь баланс”.
+            </p>
+          </section>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
