@@ -42,11 +42,20 @@
   }
 
   function validateTokens(tokens) {
-    if (!Number.isFinite(tokens)) return "Tokens: введи число.";
-    if (!Number.isInteger(tokens)) return "Tokens: только целое число.";
+    if (!Number.isFinite(tokens)) return "ТОКЕНЫ: введи число.";
+    if (!Number.isInteger(tokens)) return "ТОКЕНЫ: только целое число.";
     if (tokens < MIN_TOKENS || tokens > MAX_TOKENS)
-      return `Tokens: от ${MIN_TOKENS} до ${numberFormatter.format(MAX_TOKENS)}.`;
+      return `ТОКЕНЫ: от ${MIN_TOKENS} до ${numberFormatter.format(MAX_TOKENS)}.`;
     return null;
+  }
+
+  function escapeHtml(value) {
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
   }
 
   function showErrors(messages) {
@@ -64,23 +73,12 @@
     list.innerHTML = messages.map((m) => `<li>${escapeHtml(m)}</li>`).join("");
   }
 
-  function escapeHtml(value) {
-    return String(value)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
-
   function updateTokensUi(tokens) {
     const clamped = clampTokens(tokens);
     const tokensInput = $("tokensInput");
     const tokensRange = $("tokensRange");
-    const tokensPretty = $("tokensPretty");
     if (tokensInput) tokensInput.value = String(clamped);
     if (tokensRange) tokensRange.value = String(Math.min(clamped, SLIDER_MAX_TOKENS));
-    if (tokensPretty) tokensPretty.textContent = numberFormatter.format(clamped);
     return clamped;
   }
 
@@ -162,3 +160,4 @@
     main();
   }
 })();
+

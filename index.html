@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Premium Tokens</title>
+    <title>Премиум токены</title>
     <meta
       name="description"
-      content="Покупка Premium Tokens для L2 Ludens. Введи аккаунт, выбери количество токенов и перейди к оплате."
+      content="Покупка премиум токенов для L2 Ludens. Проверь имя аккаунта, выбери количество токенов и перейди к оплате."
     />
     <link rel="stylesheet" href="./assets/styles.css" />
   </head>
@@ -17,16 +17,13 @@
           <div class="heroBadge">
             <span class="sparkDot" aria-hidden="true"></span>
             <strong>L2 Ludens</strong>
-            <span>Premium Tokens</span>
+            <span>Премиум токены</span>
           </div>
         </div>
+
         <header class="header">
           <div class="titleRow">
-            <h1 id="pageTitle">Premium Tokens</h1>
-            <div class="spark" aria-hidden="true">
-              <span class="sparkDot"></span>
-              <span>pay.ludens.school</span>
-            </div>
+            <h1 id="pageTitle">Премиум токены</h1>
           </div>
           <p class="subtitle">Токены начисляются на аккаунт. Проверь имя аккаунта.</p>
         </header>
@@ -43,15 +40,13 @@
                 placeholder="MyAccount"
                 aria-describedby="accountHint"
               />
-              <div id="accountHint" class="hint">
-                2–32 символа, только <span class="mono">A–Z 0–9 _</span>
-              </div>
+              <div id="accountHint" class="hint">2–32 символа, только <span class="mono">A–Z 0–9 _</span></div>
             </div>
 
             <div class="field" style="margin-top: 16px">
-              <label for="tokensInput">Tokens</label>
               <div class="row2">
-                <div class="tokensRow">
+                <div class="field">
+                  <label for="tokensInput">ТОКЕНЫ</label>
                   <input
                     id="tokensInput"
                     type="number"
@@ -61,24 +56,20 @@
                     step="1"
                     value="100"
                   />
-                  <div class="sliderWrap">
-                    <input id="tokensRange" type="range" min="1" max="5000" step="1" value="100" />
-                  </div>
-                  <div class="hint">
-                    Сейчас: <strong id="tokensPretty">100</strong>
-                    <span class="small">(ползунок: 1–5 000, вручную: до 1 000 000)</span>
-                  </div>
                 </div>
 
                 <div class="field">
-                  <label for="currencySelect">Валюта</label>
+                  <label for="currencySelect">ВАЛЮТА</label>
                   <select id="currencySelect" aria-label="Currency">
                     <option value="UAH">UAH</option>
                     <option value="EUR" disabled>EUR (soon)</option>
                     <option value="USD" disabled>USD (soon)</option>
                   </select>
-                  <div class="hint">Сумма будет показана на странице оплаты. Здесь выбираешь только количество.</div>
                 </div>
+              </div>
+
+              <div class="sliderWrap" style="margin-top: 12px">
+                <input id="tokensRange" type="range" min="1" max="5000" step="1" value="100" />
               </div>
 
               <div id="presets" class="presets" style="margin-top: 12px" aria-label="Token presets"></div>
@@ -97,8 +88,8 @@
           <aside class="panel" aria-label="What happens next">
             <h2 class="asideTitle">Как это работает</h2>
             <ol class="steps">
-              <li>Имя аккаунта будет подставлено из игры — просто проверь.</li>
-              <li>Выбери количество токенов.</li>
+              <li>Имя аккаунта обычно подставлено из игры — просто проверь.</li>
+              <li>Выбери количество токенов (ползунок — до 5 000, вручную — до 1 000 000).</li>
               <li>Нажми “Оплатить” — откроется страница Monobank.</li>
               <li>После оплаты вернись в игру и обнови баланс.</li>
             </ol>
@@ -120,3 +111,4 @@
     <script src="./assets/app.js" defer></script>
   </body>
 </html>
+
