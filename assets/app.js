@@ -1,6 +1,6 @@
 (() => {
   const BACKEND_BASE = "https://api.ludens.school";
-  const CREATE_PATH = "/create";
+  const CREATE_PATH = "/pay/api/create";
 
   const MAX_TOKENS = 1_000_000;
   const MIN_TOKENS = 1;
@@ -104,7 +104,7 @@
     const url = new URL(CREATE_PATH, BACKEND_BASE);
     url.searchParams.set("account", account);
     url.searchParams.set("tokens", String(tokens));
-    url.searchParams.set("currency", currency);
+    url.searchParams.set("currency", currency || "UAH");
     return url.toString();
   }
 
@@ -160,4 +160,3 @@
     main();
   }
 })();
-

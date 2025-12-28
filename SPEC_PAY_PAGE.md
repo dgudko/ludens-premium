@@ -16,7 +16,7 @@
 - Сайт статический: без БД, без секретов, без хранения токенов/цен.
 - Цена/сумма считается на бекенде; фронт **НЕ** отправляет `amount`.
 - Фронт отправляет только: `account`, `tokens`, `currency`.
-- Backend endpoint: `https://api.ludens.school/create`.
+- Backend endpoint: `https://api.ludens.school/pay/api/create`.
 - Домен: `pay.ludens.school`.
 
 ## Входные URL-параметры
@@ -55,7 +55,7 @@
 1) Валидировать.
 2) Собрать URL:
 
-`https://api.ludens.school/create?account=...&tokens=...&currency=...`
+`https://api.ludens.school/pay/api/create?account=...&tokens=...&currency=...`
 
 3) Сделать полный редирект:
 
@@ -102,7 +102,7 @@
 1) **MVP redirect**
    - форма + валидация
    - синхронизация input+slider
-   - редирект на backend `/create`
+   - редирект на backend `/pay/api/create`
    - страницы `thanks`/`error`
 
 2) **Полировка UX**
@@ -122,6 +122,6 @@
 
 - Открывая `/?acc=Test`, поле аккаунта заполнено “Test”.
 - Валидация работает.
-- “Оплатить” редиректит на `https://api.ludens.school/create?...`.
+- “Оплатить” редиректит на `https://api.ludens.school/pay/api/create?...`.
 - `thanks.html` и `error.html` существуют и выглядят нормально.
 - Нет секретов и нет логики расчёта цены на фронте.
