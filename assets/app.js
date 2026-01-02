@@ -4,8 +4,8 @@
 
   const MAX_TOKENS = 1_000_000;
   const MIN_TOKENS = 1;
-  const SLIDER_MAX_TOKENS = 5_000;
-  const PRESETS = [10, 50, 100, 500];
+  const SLIDER_MAX_TOKENS = 1_000;
+  const PRESETS = [10, 50, 100, 500, 1000];
 
   const numberFormatter = new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 });
 
@@ -120,7 +120,7 @@
     const { acc, tokens } = readQuery();
     if (acc) accountInput.value = acc;
 
-    let currentTokens = updateTokensUi(Number.isFinite(tokens) ? tokens : 100);
+    let currentTokens = updateTokensUi(Number.isFinite(tokens) ? tokens : 1);
     initPresets((next) => {
       currentTokens = updateTokensUi(next);
       showErrors([]);

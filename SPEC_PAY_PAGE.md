@@ -35,7 +35,7 @@
 - Tokens:
   - numeric input + slider (синхронизированы)
   - input: min=1, max=1_000_000
-  - slider: min=1, max=5_000
+  - slider: min=1, max=1_000
   - пресеты: 10 / 50 / 100 / 500
 - Currency:
   - минимум UAH
