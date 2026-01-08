@@ -8,8 +8,8 @@
 
   const MAX_TOKENS = 1_000_000;
   const MIN_TOKENS = 1;
-  const SLIDER_MAX_TOKENS = 1_000;
-  const PRESETS = [10, 50, 100, 500, 1000];
+  const SLIDER_MAX_TOKENS = 500;
+  const PRESETS = [10, 50, 100, 500];
   const PREMIUM_DAYS_ORDER = [7, 30, 60];
 
   const numberFormatter = new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 });
