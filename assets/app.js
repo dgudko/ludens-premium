@@ -406,7 +406,7 @@
       });
     }
 
-    payPremiumBtn.addEventListener("click", () => {
+    payPremiumBtn.addEventListener("click", async () => {
       const account = accountInput.value.trim();
       const errors = [];
       if (!account) errors.push("Укажи имя аккаунта.");
@@ -415,8 +415,34 @@
       showPremiumErrors(errors);
       if (errors.length) return;
 
-      const url = buildPremiumCreateUrl({ account, planCode: selectedPlanCode, currency: PREMIUM_CURRENCY });
-      window.location.href = url;
+      const createUrl = buildPremiumCreateUrl({ account, planCode: selectedPlanCode, currency: PREMIUM_CURRENCY });
+
+      try {
+        setButtonDisabled(payPremiumBtn, true);
+        payPremiumBtn.textContent = "Открываем оплату...";
+
+        const response = await fetch(createUrl, {
+          method: "GET",
+          credentials: "omit",
+          cache: "no-store",
+          headers: {
+            Accept: "application/json",
+          },
+        });
+
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        const pageUrl = typeof data?.page_url === "string" ? data.page_url.trim() : "";
+        if (!pageUrl) throw new Error("Missing page_url");
+
+        window.location.href = pageUrl;
+      } catch {
+        showPremiumErrors(["Не удалось открыть оплату. Попробуй ещё раз."]);
+        updateButtons();
+      } finally {
+        payPremiumBtn.textContent = "Оплатить Премиум";
+        updateButtons();
+      }
     });
 
     function applyTab(tab) {
