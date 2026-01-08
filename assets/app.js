@@ -349,10 +349,19 @@
       return height;
     }
 
+    let syncRaf = 0;
+    function queueSyncTabPanelHeights() {
+      window.cancelAnimationFrame(syncRaf);
+      syncRaf = window.requestAnimationFrame(() => {
+        syncRaf = 0;
+        syncTabPanelHeights();
+      });
+    }
+
     function syncTabPanelHeights() {
       if (!premiumPanel || !tokensPanel) return;
-      const visiblePanel = premiumPanel.hidden ? tokensPanel : premiumPanel;
-      const width = visiblePanel.getBoundingClientRect().width || 0;
+      const container = premiumPanel.parentElement;
+      const width = (container?.getBoundingClientRect().width || premiumPanel.getBoundingClientRect().width || 0);
       if (!width) return;
 
       const premiumHeight = measurePanelHeight(premiumPanel, width);
@@ -389,7 +398,7 @@
       plansError = "";
       showPremiumErrors([]);
       renderPlans({ plansByDays, selectedPlanCode, loading: true, errorMessage: "" });
-      syncTabPanelHeights();
+      queueSyncTabPanelHeights();
 
       try {
         const url = new URL(PREMIUM_PLANS_PATH, BACKEND_BASE);
@@ -419,7 +428,7 @@
       } finally {
         plansLoading = false;
         renderPlans({ plansByDays, selectedPlanCode, loading: false, errorMessage: plansError });
-        syncTabPanelHeights();
+        queueSyncTabPanelHeights();
         updateButtons();
       }
     }
@@ -436,7 +445,7 @@
 
       selectedPlanCode = planCode;
       renderPlans({ plansByDays, selectedPlanCode, loading: plansLoading, errorMessage: plansError });
-      syncTabPanelHeights();
+      queueSyncTabPanelHeights();
       updateButtons();
       });
     }
@@ -485,7 +494,7 @@
       const isPremium = setTab(activeTab);
       if (isPremium) void ensurePlansLoaded();
       updateButtons();
-      syncTabPanelHeights();
+      queueSyncTabPanelHeights();
     }
 
     if (tabPremiumBtn) tabPremiumBtn.addEventListener("click", () => applyTab("premium"));
@@ -496,8 +505,13 @@
     let resizeTimer = 0;
     window.addEventListener("resize", () => {
       window.clearTimeout(resizeTimer);
-      resizeTimer = window.setTimeout(syncTabPanelHeights, 80);
+      resizeTimer = window.setTimeout(queueSyncTabPanelHeights, 80);
     });
+
+    window.setTimeout(queueSyncTabPanelHeights, 0);
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(queueSyncTabPanelHeights).catch(() => {});
+    }
   }
 
   if (document.readyState === "loading") {

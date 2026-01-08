@@ -75,7 +75,7 @@ a {
 }
 
 .card.compact {
-  max-width: 860px;
+  max-width: 760px;
 }
 
 .header {
@@ -503,6 +503,15 @@ input[type="range"] {
   display: none;
 }
 
+.tabPanel {
+  display: flex;
+  flex-direction: column;
+}
+
+.tabPanel .actions {
+  margin-top: auto;
+}
+
 .measureHidden {
   position: absolute !important;
   left: -9999px !important;
@@ -560,9 +569,12 @@ input[type="range"] {
 }
 
 .planTitle {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 900;
   letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .planPrice {
