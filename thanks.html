@@ -3,8 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Оплата — обработка</title>
-    <meta name="description" content="Оплата обрабатывается. Проверь баланс в игре." />
+    <title>Спасибо за поддержку сервера!</title>
+    <meta
+      name="description"
+      content="Спасибо за поддержку L2 Ludens. Где проверить Премиум/токены в игре и где посмотреть историю платежей."
+    />
     <link rel="stylesheet" href="./assets/styles.css" />
   </head>
   <body>
@@ -14,38 +17,88 @@
           <div class="heroBadge">
             <span class="sparkDot" aria-hidden="true"></span>
             <strong>L2 Ludens</strong>
-            <span>Премиум токены</span>
+            <span>Премиум</span>
           </div>
         </div>
 
         <header class="header">
           <div class="titleRow">
-            <h1 id="pageTitle">Спасибо</h1>
+            <h1 id="pageTitle">Спасибо за поддержку сервера!</h1>
           </div>
-          <p class="subtitle">Оплата обрабатывается. Если всё прошло — токены начислятся в течение ~N минут.</p>
+          <p class="subtitle">Желаем приятной игры и удачных дропов. Обычно обновление появляется в игре в течение нескольких минут.</p>
         </header>
 
-        <div class="content" style="grid-template-columns: 1fr">
-          <section class="panel">
+        <div class="content">
+          <section class="panel" aria-label="Next steps">
             <h2 class="asideTitle">Что делать дальше</h2>
             <ol class="steps">
               <li>Вернись в игру.</li>
-              <li>Нажми <span class="mono">Refresh balance</span> (или перезайди).</li>
-              <li>Если токены не появились через ~N минут — попробуй ещё раз или свяжись с нами.</li>
+              <li>Открой <span class="mono">Alt + B</span> → раздел <strong>Премиум</strong>.</li>
+              <li>Если статус не обновился сразу — закрой и открой вкладку ещё раз через 1–2 минуты.</li>
+              <li>Внизу вкладки <strong>Премиум</strong> есть раздел <strong>«Платежи»</strong> — там история оплат и данные для поддержки.</li>
             </ol>
 
+            <div class="badge" style="margin-top: 14px">
+              <strong>Важно</strong>
+              <span>Премиум и токены начисляются на указанный аккаунт. Проверь имя аккаунта.</span>
+            </div>
+
+            <div id="paymentSummary" class="badge" style="margin-top: 10px; display: none"></div>
+
             <div class="actions" style="margin-top: 16px">
-              <a class="btn" href="./">Вернуться на главную</a>
+              <a class="btn" href="./?tab=premium">Вернуться к оплате</a>
+              <a class="btn secondary" href="./?tab=tokens" style="text-align: center">Купить токены</a>
             </div>
 
             <p class="hint" style="margin: 14px 0 0">
-              Важно: Monobank может редиректить на эту страницу даже если статус не <span class="mono">success</span>.
-              Поэтому это экран “обрабатывается/проверь баланс”.
+              Если прошло больше 10 минут и обновление не появилось — открой «Платежи», скопируй/сфотографируй данные и обратись в поддержку сервера.
             </p>
           </section>
+
+          <aside class="panel" aria-label="Where to check">
+            <h2 class="asideTitle">Где смотреть в клиенте</h2>
+            <ul class="steps" style="list-style: disc; padding-left: 18px; margin-top: 10px">
+              <li><span class="mono">Alt + B</span> → <strong>Премиум</strong>: текущий статус подписки и бонусы.</li>
+              <li>Внизу вкладки <strong>Премиум</strong> → <strong>Платежи</strong>: вся история оплат, удобно для поддержки.</li>
+              <li>Если ты покупал токены — они появятся на балансе после обработки платежа.</li>
+            </ul>
+
+            <div class="badge" style="margin-top: 14px">
+              <strong>Подсказка</strong>
+              <span>Иногда Monobank возвращает сюда раньше, чем платёж обработается. Просто подожди пару минут и проверь ещё раз.</span>
+            </div>
+          </aside>
         </div>
       </main>
     </div>
+
+    <script>
+      (() => {
+        const params = new URLSearchParams(window.location.search);
+        const account = (params.get("account") || params.get("acc") || "").trim();
+        const plan = (params.get("plan") || "").trim();
+        const tokens = (params.get("tokens") || "").trim();
+
+        const box = document.getElementById("paymentSummary");
+        if (!box) return;
+
+        const safe = (value) =>
+          String(value)
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+
+        const parts = [];
+        if (account) parts.push(`<strong>Аккаунт:</strong> ${safe(account)}`);
+        if (plan) parts.push(`<strong>План:</strong> ${safe(plan)}`);
+        if (tokens) parts.push(`<strong>Токены:</strong> ${safe(tokens)}`);
+
+        if (!parts.length) return;
+        box.style.display = "inline-flex";
+        box.innerHTML = parts.join(' <span aria-hidden="true">·</span> ');
+      })();
+    </script>
   </body>
 </html>
-
