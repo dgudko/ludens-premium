@@ -1,13 +1,19 @@
 (() => {
   const BACKEND_BASE = "https://api.ludens.school";
   const CREATE_PATH = "/pay/api/create";
+  const PREMIUM_PLANS_PATH = "/premium/plans";
+  const PREMIUM_CREATE_PATH = "/premium/create";
+  const PREMIUM_CURRENCY = "UAH";
+  const ACCOUNT_STORAGE_KEY = "ludens_pay_account";
 
   const MAX_TOKENS = 1_000_000;
   const MIN_TOKENS = 1;
   const SLIDER_MAX_TOKENS = 1_000;
   const PRESETS = [10, 50, 100, 500, 1000];
+  const PREMIUM_DAYS_ORDER = [7, 30, 60];
 
   const numberFormatter = new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 });
+  const moneyFormatter = new Intl.NumberFormat(undefined, { style: "currency", currency: PREMIUM_CURRENCY });
 
   function $(id) {
     return document.getElementById(id);
@@ -18,7 +24,8 @@
     const acc = params.get("acc") ?? params.get("account") ?? "";
     const rawTokens = params.get("tokens");
     const tokens = rawTokens ? Number(rawTokens) : NaN;
-    return { acc, tokens };
+    const tab = params.get("tab") ?? params.get("mode") ?? "";
+    return { acc, tokens, tab };
   }
 
   function clampTokens(value) {
@@ -73,6 +80,21 @@
     list.innerHTML = messages.map((m) => `<li>${escapeHtml(m)}</li>`).join("");
   }
 
+  function showPremiumErrors(messages) {
+    const box = $("premiumErrors");
+    const list = $("premiumErrorsList");
+    if (!box || !list) return;
+
+    if (!messages.length) {
+      box.classList.remove("show");
+      list.innerHTML = "";
+      return;
+    }
+
+    box.classList.add("show");
+    list.innerHTML = messages.map((m) => `<li>${escapeHtml(m)}</li>`).join("");
+  }
+
   function updateTokensUi(tokens) {
     const clamped = clampTokens(tokens);
     const tokensInput = $("tokensInput");
@@ -80,6 +102,140 @@
     if (tokensInput) tokensInput.value = String(clamped);
     if (tokensRange) tokensRange.value = String(Math.min(clamped, SLIDER_MAX_TOKENS));
     return clamped;
+  }
+
+  function setButtonDisabled(button, disabled) {
+    if (!button) return;
+    button.disabled = Boolean(disabled);
+  }
+
+  function getStoredAccount() {
+    try {
+      return window.localStorage.getItem(ACCOUNT_STORAGE_KEY) || "";
+    } catch {
+      return "";
+    }
+  }
+
+  function setStoredAccount(value) {
+    try {
+      window.localStorage.setItem(ACCOUNT_STORAGE_KEY, value);
+    } catch {
+      // ignore
+    }
+  }
+
+  function setTab(tab) {
+    const premiumPanel = $("tabPremium");
+    const tokensPanel = $("tabTokens");
+    const premiumBtn = $("tabPremiumBtn");
+    const tokensBtn = $("tabTokensBtn");
+    const asidePremium = $("asidePremium");
+    const asideTokens = $("asideTokens");
+
+    const isPremium = tab === "premium";
+
+    if (premiumPanel) premiumPanel.hidden = !isPremium;
+    if (tokensPanel) tokensPanel.hidden = isPremium;
+
+    if (premiumBtn) {
+      premiumBtn.classList.toggle("active", isPremium);
+      premiumBtn.setAttribute("aria-selected", String(isPremium));
+      premiumBtn.tabIndex = isPremium ? 0 : -1;
+    }
+    if (tokensBtn) {
+      tokensBtn.classList.toggle("active", !isPremium);
+      tokensBtn.setAttribute("aria-selected", String(!isPremium));
+      tokensBtn.tabIndex = isPremium ? -1 : 0;
+    }
+
+    if (asidePremium) asidePremium.hidden = !isPremium;
+    if (asideTokens) asideTokens.hidden = isPremium;
+
+    if (isPremium) {
+      showErrors([]);
+    } else {
+      showPremiumErrors([]);
+    }
+
+    return isPremium;
+  }
+
+  function normalizePlans(data) {
+    const list =
+      (Array.isArray(data) && data) ||
+      (data && Array.isArray(data.plans) && data.plans) ||
+      (data && Array.isArray(data.data) && data.data) ||
+      [];
+
+    return list
+      .map((plan) => {
+        if (!plan || typeof plan !== "object") return null;
+        const code = String(plan.code ?? plan.plan ?? plan.plan_code ?? plan.id ?? "").trim();
+        const amountMinor = Number(plan.amount_minor ?? plan.amountMinor ?? plan.amount ?? plan.price_minor ?? plan.priceMinor);
+        const days = Number(plan.days ?? plan.duration_days ?? plan.durationDays);
+        return { code, amountMinor, days, raw: plan };
+      })
+      .filter(Boolean);
+  }
+
+  function inferDays(plan) {
+    if (Number.isFinite(plan.days) && plan.days > 0) return plan.days;
+    const match = /(\d{1,3})/.exec(plan.code);
+    if (!match) return NaN;
+    const parsed = Number(match[1]);
+    return Number.isFinite(parsed) ? parsed : NaN;
+  }
+
+  function formatAmountMinor(amountMinor) {
+    if (!Number.isFinite(amountMinor)) return "—";
+    return moneyFormatter.format(amountMinor / 100);
+  }
+
+  function renderPlans({ plansByDays, selectedPlanCode, loading, errorMessage }) {
+    const status = $("plansStatus");
+    const grid = $("plansGrid");
+    if (!status || !grid) return;
+
+    if (loading) {
+      status.textContent = "Загружаем планы...";
+    } else if (errorMessage) {
+      status.textContent = "Не удалось загрузить планы";
+    } else {
+      status.textContent = "";
+    }
+
+    const cards = PREMIUM_DAYS_ORDER.map((days) => {
+      const plan = plansByDays.get(days) || null;
+      const code = plan?.code || "";
+      const isSelected = code && code === selectedPlanCode;
+      const disabled = Boolean(errorMessage) || loading || !plan;
+      const price = plan ? formatAmountMinor(plan.amountMinor) : "—";
+      const title = `Premium ${days} days`;
+
+      return `
+        <button
+          type="button"
+          class="planCard${isSelected ? " selected" : ""}"
+          data-plan-code="${escapeHtml(code)}"
+          ${disabled ? "disabled" : ""}
+          aria-pressed="${isSelected ? "true" : "false"}"
+        >
+          <div class="planTitle">${escapeHtml(title)}</div>
+          <div class="planPrice">${escapeHtml(price)}</div>
+        </button>
+      `;
+    }).join("");
+
+    grid.innerHTML = cards;
+  }
+
+  function buildPremiumCreateUrl({ account, planCode, currency }) {
+    const url = new URL(PREMIUM_CREATE_PATH, BACKEND_BASE);
+    url.searchParams.set("account", account);
+    url.searchParams.set("plan", planCode);
+    url.searchParams.set("currency", currency || PREMIUM_CURRENCY);
+    return url.toString();
   }
 
   function initPresets(setTokens) {
@@ -114,11 +270,38 @@
     const tokensRange = $("tokensRange");
     const currencySelect = $("currencySelect");
     const payBtn = $("payBtn");
+    const payPremiumBtn = $("payPremiumBtn");
+    const plansGrid = $("plansGrid");
+    const tabPremiumBtn = $("tabPremiumBtn");
+    const tabTokensBtn = $("tabTokensBtn");
 
-    if (!accountInput || !tokensInput || !tokensRange || !currencySelect || !payBtn) return;
+    if (!accountInput || !tokensInput || !tokensRange || !currencySelect || !payBtn || !payPremiumBtn) return;
 
-    const { acc, tokens } = readQuery();
-    if (acc) accountInput.value = acc;
+    let activeTab = "premium";
+    let plansLoading = false;
+    let plansLoaded = false;
+    let plansError = "";
+    let selectedPlanCode = "";
+    const plansByDays = new Map();
+
+    const { acc, tokens, tab } = readQuery();
+    const storedAcc = getStoredAccount();
+    const initialAccount = acc || storedAcc;
+    if (initialAccount) accountInput.value = initialAccount;
+    if (acc) setStoredAccount(acc);
+
+    const normalizedTab = String(tab || "")
+      .trim()
+      .toLowerCase();
+    const hasTokensQuery = Number.isFinite(tokens);
+    activeTab =
+      normalizedTab === "tokens" || normalizedTab === "token"
+        ? "tokens"
+        : normalizedTab === "premium" || normalizedTab === "subscription" || normalizedTab === "sub"
+          ? "premium"
+          : hasTokensQuery
+            ? "tokens"
+            : "premium";
 
     let currentTokens = updateTokensUi(Number.isFinite(tokens) ? tokens : 1);
     initPresets((next) => {
@@ -139,6 +322,19 @@
       showErrors([]);
     });
 
+    function updateButtons() {
+      const account = accountInput.value.trim();
+      const hasAccount = Boolean(account);
+
+      setButtonDisabled(payBtn, !hasAccount);
+      setButtonDisabled(payPremiumBtn, !hasAccount || !selectedPlanCode || !plansLoaded);
+    }
+
+    accountInput.addEventListener("input", () => {
+      setStoredAccount(accountInput.value.trim());
+      updateButtons();
+    });
+
     payBtn.addEventListener("click", () => {
       const account = accountInput.value.trim();
       const currency = currencySelect.value;
@@ -152,6 +348,87 @@
       const redirectUrl = buildRedirectUrl({ account, tokens: tokensValue, currency });
       window.location.href = redirectUrl;
     });
+
+    async function ensurePlansLoaded() {
+      if (plansLoaded || plansLoading) return;
+      plansLoading = true;
+      plansError = "";
+      showPremiumErrors([]);
+      renderPlans({ plansByDays, selectedPlanCode, loading: true, errorMessage: "" });
+
+      try {
+        const url = new URL(PREMIUM_PLANS_PATH, BACKEND_BASE);
+        url.searchParams.set("currency", PREMIUM_CURRENCY);
+
+        const response = await fetch(url.toString(), {
+          method: "GET",
+          credentials: "omit",
+          cache: "no-store",
+        });
+
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        const normalized = normalizePlans(data);
+
+        plansByDays.clear();
+        for (const plan of normalized) {
+          if (!plan.code) continue;
+          const days = inferDays(plan);
+          if (!PREMIUM_DAYS_ORDER.includes(days)) continue;
+          if (!plansByDays.has(days)) plansByDays.set(days, plan);
+        }
+
+        plansLoaded = true;
+      } catch {
+        plansError = "Не удалось загрузить планы";
+      } finally {
+        plansLoading = false;
+        renderPlans({ plansByDays, selectedPlanCode, loading: false, errorMessage: plansError });
+        updateButtons();
+      }
+    }
+
+    if (plansGrid) {
+      plansGrid.addEventListener("click", (e) => {
+      const target = e.target;
+      if (!(target instanceof HTMLElement)) return;
+      const button = target.closest("[data-plan-code]");
+      if (!(button instanceof HTMLElement)) return;
+      if (button.hasAttribute("disabled")) return;
+      const planCode = button.getAttribute("data-plan-code") || "";
+      if (!planCode) return;
+
+      selectedPlanCode = planCode;
+      renderPlans({ plansByDays, selectedPlanCode, loading: plansLoading, errorMessage: plansError });
+      updateButtons();
+      });
+    }
+
+    payPremiumBtn.addEventListener("click", () => {
+      const account = accountInput.value.trim();
+      const errors = [];
+      if (!account) errors.push("Укажи имя аккаунта.");
+      if (!selectedPlanCode) errors.push("Выбери срок Premium подписки.");
+      if (plansError) errors.push("Не удалось загрузить планы. Попробуй позже.");
+
+      showPremiumErrors(errors);
+      if (errors.length) return;
+
+      const url = buildPremiumCreateUrl({ account, planCode: selectedPlanCode, currency: PREMIUM_CURRENCY });
+      window.location.href = url;
+    });
+
+    function applyTab(tab) {
+      activeTab = tab === "tokens" ? "tokens" : "premium";
+      const isPremium = setTab(activeTab);
+      if (isPremium) void ensurePlansLoaded();
+      updateButtons();
+    }
+
+    if (tabPremiumBtn) tabPremiumBtn.addEventListener("click", () => applyTab("premium"));
+    if (tabTokensBtn) tabTokensBtn.addEventListener("click", () => applyTab("tokens"));
+
+    applyTab(activeTab);
   }
 
   if (document.readyState === "loading") {

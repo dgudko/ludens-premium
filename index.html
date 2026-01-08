@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Премиум токены</title>
+    <title>Premium</title>
     <meta
       name="description"
       content="Покупка премиум токенов для L2 Ludens. Проверь имя аккаунта, выбери количество токенов и перейди к оплате."
@@ -17,15 +17,39 @@
           <div class="heroBadge">
             <span class="sparkDot" aria-hidden="true"></span>
             <strong>L2 Ludens</strong>
-            <span>Премиум токены</span>
+            <span>Premium</span>
           </div>
         </div>
 
         <header class="header">
           <div class="titleRow">
-            <h1 id="pageTitle">Премиум токены</h1>
+            <h1 id="pageTitle">Premium</h1>
           </div>
-          <p class="subtitle">Токены начисляются на аккаунт. Проверь имя аккаунта.</p>
+          <p class="subtitle">Premium начисляется на аккаунт. Проверь имя аккаунта.</p>
+          <div class="tabs" role="tablist" aria-label="Payment tabs" style="margin-top: 14px">
+            <button
+              id="tabPremiumBtn"
+              class="tab"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              aria-controls="tabPremium"
+              data-tab="premium"
+            >
+              Premium подписка
+            </button>
+            <button
+              id="tabTokensBtn"
+              class="tab"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="tabTokens"
+              data-tab="tokens"
+            >
+              Premium токены
+            </button>
+          </div>
         </header>
 
         <div class="content">
@@ -40,10 +64,27 @@
                 placeholder="MyAccount"
                 aria-describedby="accountHint"
               />
-              <div id="accountHint" class="hint">1 Премиум Токен = 50 гривен.</span></div>
+              <div id="accountHint" class="hint">Premium начисляется на указанный аккаунт. Проверь имя.</div>
             </div>
 
-            <div class="field" style="margin-top: 16px">
+            <section id="tabPremium" class="tabPanel" role="tabpanel" aria-labelledby="tabPremiumBtn" style="margin-top: 16px">
+              <div class="hint">Выбери срок Premium подписки. Цены подтягиваются автоматически.</div>
+
+              <div id="plansStatus" class="hint" style="margin-top: 12px"></div>
+              <div id="plansGrid" class="plansGrid" style="margin-top: 12px" aria-label="Premium plans"></div>
+
+              <div id="premiumErrors" class="errors" role="alert" aria-live="polite" style="margin-top: 16px">
+                <div class="errorsTitle">Проблема</div>
+                <ul id="premiumErrorsList" class="errorsList"></ul>
+              </div>
+
+              <div class="actions" style="margin-top: 16px">
+                <button id="payPremiumBtn" class="btn" type="button" disabled>Оплатить Premium</button>
+              </div>
+            </section>
+
+            <section id="tabTokens" class="tabPanel" role="tabpanel" aria-labelledby="tabTokensBtn" hidden style="margin-top: 16px">
+            <div class="field" style="margin-top: 0">
               <div class="row2">
                 <div class="field">
                   <label for="tokensInput">ТОКЕНЫ</label>
@@ -72,6 +113,7 @@
                 <input id="tokensRange" type="range" min="1" max="1000" step="1" value="1" />
               </div>
 
+              <div class="hint" style="margin-top: 10px">1 Premium token = 50 Premium coins.</div>
               <div id="presets" class="presets" style="margin-top: 12px" aria-label="Token presets"></div>
             </div>
 
@@ -83,12 +125,29 @@
             <div class="actions" style="margin-top: 16px">
               <button id="payBtn" class="btn" type="button">Оплатить</button>
             </div>
+            </section>
           </section>
 
           <aside class="panel" aria-label="What happens next">
+            <div id="asidePremium">
+              <h2 class="asideTitle">Как работает Premium подписка</h2>
+              <ol class="steps">
+                <li>Введи имя аккаунта.</li>
+                <li>Выбери срок Premium подписки.</li>
+                <li>Нажми “Оплатить Premium” — откроется Monobank.</li>
+                <li>После оплаты Premium автоматически продлится в игре.</li>
+              </ol>
+
+              <div class="badge" style="margin-top: 14px">
+                <strong>Важно</strong>
+                <span>Premium начисляется на указанный аккаунт. Проверь имя.</span>
+              </div>
+            </div>
+
+            <div id="asideTokens" hidden>
             <h2 class="asideTitle">Как это работает</h2>
             <ol class="steps">
-              <li>Имя аккаунта обычно подставлено из игры — просто проверь.</li>
+              <li>Имя аккаунта обычно подставлено из игры - просто проверь.</li>
               <li>Выбери количество токенов от 1 и выше.</li>
               <li>Нажми “Оплатить” — откроется страница Monobank.</li>
               <li>После оплаты вернись в игру и обнови баланс.</li>
@@ -103,6 +162,7 @@
               После оплаты Monobank может показать, что всё ок даже если статус ещё
               обрабатывается. Просто проверь баланс в игре.
             </p>
+            </div>
           </aside>
         </div>
       </main>

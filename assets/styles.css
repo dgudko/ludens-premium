@@ -411,3 +411,101 @@ input[type="range"] {
   color: var(--text);
   font-weight: 800;
 }
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tab {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+.tab:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+@media (prefers-color-scheme: dark) {
+  .tab:hover {
+    background: rgba(250, 250, 250, 0.06);
+  }
+}
+
+.tab.active,
+.tab[aria-selected="true"] {
+  border-color: rgba(220, 38, 38, 0.5);
+  background: rgba(220, 38, 38, 0.08);
+}
+
+.tabPanel[hidden] {
+  display: none;
+}
+
+.plansGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 520px) {
+  .plansGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.planCard {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  border-radius: var(--radiusSm);
+  padding: 12px 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease, transform 120ms ease;
+}
+
+.planCard:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+@media (prefers-color-scheme: dark) {
+  .planCard:hover {
+    background: rgba(250, 250, 250, 0.06);
+  }
+}
+
+.planCard:active {
+  transform: translateY(1px);
+}
+
+.planCard.selected {
+  border-color: rgba(220, 38, 38, 0.55);
+  box-shadow: var(--focus);
+}
+
+.planCard:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.planTitle {
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+
+.planPrice {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
