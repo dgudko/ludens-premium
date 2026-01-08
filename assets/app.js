@@ -8,12 +8,12 @@
 
   const MAX_TOKENS = 1_000_000;
   const MIN_TOKENS = 1;
-  const SLIDER_MAX_TOKENS = 500;
-  const PRESETS = [10, 50, 100, 500];
+  const SLIDER_MAX_TOKENS = 1_000;
+  const PRESETS = [10, 50, 100, 500, 1000];
   const PREMIUM_DAYS_ORDER = [7, 30, 60];
 
   const numberFormatter = new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 });
-  const moneyFormatter = new Intl.NumberFormat(undefined, { style: "currency", currency: PREMIUM_CURRENCY });
+  const uahFormatter = new Intl.NumberFormat(undefined, { maximumFractionDigits: 2 });
 
   function $(id) {
     return document.getElementById(id);
@@ -188,8 +188,8 @@
   }
 
   function formatAmountMinor(amountMinor) {
-    if (!Number.isFinite(amountMinor)) return "—";
-    return moneyFormatter.format(amountMinor / 100);
+    if (!Number.isFinite(amountMinor)) return "-";
+    return `${uahFormatter.format(amountMinor / 100)} грн`;
   }
 
   function renderPlans({ plansByDays, selectedPlanCode, loading, errorMessage }) {
@@ -205,13 +205,15 @@
       status.textContent = "";
     }
 
+    status.classList.toggle("hintError", Boolean(errorMessage));
+
     const cards = PREMIUM_DAYS_ORDER.map((days) => {
       const plan = plansByDays.get(days) || null;
-      const code = plan?.code || "";
+      const code = plan?.code || `PREM_${days}`;
       const isSelected = code && code === selectedPlanCode;
-      const disabled = Boolean(errorMessage) || loading || !plan;
-      const price = plan ? formatAmountMinor(plan.amountMinor) : "—";
-      const title = `Premium ${days} days`;
+      const disabled = false;
+      const price = plan ? formatAmountMinor(plan.amountMinor) : loading ? "..." : "-";
+      const title = `Премиум на ${days} дней`;
 
       return `
         <button
@@ -327,7 +329,7 @@
       const hasAccount = Boolean(account);
 
       setButtonDisabled(payBtn, !hasAccount);
-      setButtonDisabled(payPremiumBtn, !hasAccount || !selectedPlanCode || !plansLoaded);
+      setButtonDisabled(payPremiumBtn, !hasAccount || !selectedPlanCode);
     }
 
     accountInput.addEventListener("input", () => {
@@ -408,8 +410,7 @@
       const account = accountInput.value.trim();
       const errors = [];
       if (!account) errors.push("Укажи имя аккаунта.");
-      if (!selectedPlanCode) errors.push("Выбери срок Premium подписки.");
-      if (plansError) errors.push("Не удалось загрузить планы. Попробуй позже.");
+      if (!selectedPlanCode) errors.push("Выбери срок Премиум подписки.");
 
       showPremiumErrors(errors);
       if (errors.length) return;

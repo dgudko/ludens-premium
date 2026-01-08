@@ -208,6 +208,11 @@ input[type="number"] {
   color: var(--muted);
 }
 
+.hintError {
+  font-weight: 800;
+  color: rgba(220, 38, 38, 0.9);
+}
+
 .tokensRow {
   display: grid;
   gap: 10px;
@@ -272,6 +277,20 @@ input[type="range"] {
 
 .btn:hover {
   filter: brightness(0.96);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: none;
+}
+
+.btn:disabled:hover {
+  filter: none;
+}
+
+.btn:disabled:active {
+  transform: none;
 }
 
 .btn:active {
@@ -413,21 +432,30 @@ input[type="range"] {
 }
 
 .tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.tab:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
 }
 
 .tab {
-  border: 1px solid var(--border);
+  border: 1px solid transparent;
   background: transparent;
-  color: var(--text);
+  color: var(--muted);
   border-radius: 999px;
   padding: 8px 12px;
   font-size: 13px;
   font-weight: 800;
   cursor: pointer;
-  transition: background 120ms ease, border-color 120ms ease;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
 }
 
 .tab:hover {
@@ -435,6 +463,10 @@ input[type="range"] {
 }
 
 @media (prefers-color-scheme: dark) {
+  .tabs {
+    background: rgba(250, 250, 250, 0.05);
+  }
+
   .tab:hover {
     background: rgba(250, 250, 250, 0.06);
   }
@@ -442,8 +474,9 @@ input[type="range"] {
 
 .tab.active,
 .tab[aria-selected="true"] {
-  border-color: rgba(220, 38, 38, 0.5);
-  background: rgba(220, 38, 38, 0.08);
+  border-color: rgba(220, 38, 38, 0.25);
+  background: var(--accent);
+  color: var(--accentText);
 }
 
 .tabPanel[hidden] {

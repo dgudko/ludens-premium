@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Premium</title>
+    <title>Премиум</title>
     <meta
       name="description"
       content="Покупка премиум токенов для L2 Ludens. Проверь имя аккаунта, выбери количество токенов и перейди к оплате."
@@ -17,15 +17,15 @@
           <div class="heroBadge">
             <span class="sparkDot" aria-hidden="true"></span>
             <strong>L2 Ludens</strong>
-            <span>Premium</span>
+            <span>Премиум</span>
           </div>
         </div>
 
         <header class="header">
           <div class="titleRow">
-            <h1 id="pageTitle">Premium</h1>
+            <h1 id="pageTitle">Премиум</h1>
           </div>
-          <p class="subtitle">Premium начисляется на аккаунт. Проверь имя аккаунта.</p>
+          <p class="subtitle">Премиум начисляется на аккаунт. Проверь имя аккаунта.</p>
           <div class="tabs" role="tablist" aria-label="Payment tabs" style="margin-top: 14px">
             <button
               id="tabPremiumBtn"
@@ -36,7 +36,7 @@
               aria-controls="tabPremium"
               data-tab="premium"
             >
-              Premium подписка
+              Премиум подписка
             </button>
             <button
               id="tabTokensBtn"
@@ -47,7 +47,7 @@
               aria-controls="tabTokens"
               data-tab="tokens"
             >
-              Premium токены
+              Премиум токены
             </button>
           </div>
         </header>
@@ -64,14 +64,27 @@
                 placeholder="MyAccount"
                 aria-describedby="accountHint"
               />
-              <div id="accountHint" class="hint">Premium начисляется на указанный аккаунт. Проверь имя.</div>
+              <div id="accountHint" class="hint">Премиум начисляется на указанный аккаунт. Проверь имя.</div>
             </div>
 
             <section id="tabPremium" class="tabPanel" role="tabpanel" aria-labelledby="tabPremiumBtn" style="margin-top: 16px">
-              <div class="hint">Выбери срок Premium подписки. Цены подтягиваются автоматически.</div>
+              <div class="hint">Выбери срок Премиум подписки. Цены подтягиваются автоматически.</div>
 
               <div id="plansStatus" class="hint" style="margin-top: 12px"></div>
-              <div id="plansGrid" class="plansGrid" style="margin-top: 12px" aria-label="Premium plans"></div>
+              <div id="plansGrid" class="plansGrid" style="margin-top: 12px" aria-label="Планы Премиума">
+                <button type="button" class="planCard" data-plan-code="PREM_7" aria-pressed="false">
+                  <div class="planTitle">Премиум на 7 дней</div>
+                  <div class="planPrice">...</div>
+                </button>
+                <button type="button" class="planCard" data-plan-code="PREM_30" aria-pressed="false">
+                  <div class="planTitle">Премиум на 30 дней</div>
+                  <div class="planPrice">...</div>
+                </button>
+                <button type="button" class="planCard" data-plan-code="PREM_60" aria-pressed="false">
+                  <div class="planTitle">Премиум на 60 дней</div>
+                  <div class="planPrice">...</div>
+                </button>
+              </div>
 
               <div id="premiumErrors" class="errors" role="alert" aria-live="polite" style="margin-top: 16px">
                 <div class="errorsTitle">Проблема</div>
@@ -79,7 +92,7 @@
               </div>
 
               <div class="actions" style="margin-top: 16px">
-                <button id="payPremiumBtn" class="btn" type="button" disabled>Оплатить Premium</button>
+                <button id="payPremiumBtn" class="btn" type="button" disabled>Оплатить Премиум</button>
               </div>
             </section>
 
@@ -113,7 +126,7 @@
                 <input id="tokensRange" type="range" min="1" max="1000" step="1" value="1" />
               </div>
 
-              <div class="hint" style="margin-top: 10px">1 Premium token = 50 Premium coins.</div>
+              <div class="hint" style="margin-top: 10px">1 Премиум токен = 50 гривен.</div>
               <div id="presets" class="presets" style="margin-top: 12px" aria-label="Token presets"></div>
             </div>
 
@@ -130,17 +143,17 @@
 
           <aside class="panel" aria-label="What happens next">
             <div id="asidePremium">
-              <h2 class="asideTitle">Как работает Premium подписка</h2>
+              <h2 class="asideTitle">Как работает Премиум подписка</h2>
               <ol class="steps">
                 <li>Введи имя аккаунта.</li>
-                <li>Выбери срок Premium подписки.</li>
-                <li>Нажми “Оплатить Premium” — откроется Monobank.</li>
-                <li>После оплаты Premium автоматически продлится в игре.</li>
+                <li>Выбери срок Премиум подписки.</li>
+                <li>Нажми "Оплатить Премиум" - откроется Monobank.</li>
+                <li>После оплаты Премиум автоматически продлится в игре.</li>
               </ol>
 
               <div class="badge" style="margin-top: 14px">
                 <strong>Важно</strong>
-                <span>Premium начисляется на указанный аккаунт. Проверь имя.</span>
+                <span>Премиум начисляется на указанный аккаунт. Проверь имя.</span>
               </div>
             </div>
 
