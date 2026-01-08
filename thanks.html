@@ -8,7 +8,7 @@
       name="description"
       content="Спасибо за поддержку L2 Ludens. Где проверить Премиум/токены в игре и где посмотреть историю платежей."
     />
-    <link rel="stylesheet" href="./assets/styles.css" />
+    <link rel="stylesheet" href="./assets/styles.css?v=3" />
   </head>
   <body>
     <div class="wrap">
@@ -29,24 +29,22 @@
         </header>
 
         <div class="content" style="grid-template-columns: 1fr">
-          <section class="panel" aria-label="Next steps">
+          <div aria-label="Next steps">
             <h2 class="asideTitle">Где проверить покупку</h2>
             <p class="hint" style="margin: 10px 0 0">
               Зайди в игру и открой <span class="mono">Alt + B</span> → <strong>Премиум</strong>.
-              Там обновится статус подписки или начислятся токены.
+              Если не увидел сразу — просто подожди немного и открой вкладку ещё раз.
+            </p>
+            <p class="hint" style="margin: 10px 0 0">
+              Внизу вкладки “Премиум” есть “Платежи” — там история оплат и данные для поддержки.
             </p>
 
-            <div class="badge" style="margin-top: 14px">
-              <strong>Подсказка</strong>
-              <span>Внизу вкладки “Премиум” есть “Платежи” — там вся история и данные для поддержки.</span>
-            </div>
+            <p id="paymentSummary" class="small" style="margin: 14px 0 0; display: none"></p>
 
-            <div id="paymentSummary" class="badge" style="margin-top: 10px; display: none"></div>
-
-            <div class="actions" style="margin-top: 16px">
-              <button id="closeTabBtn" class="btn" type="button">Закрыть вкладку</button>
+            <div class="ctaRow">
+              <button id="closeTabBtn" class="btn inline" type="button">Закрыть вкладку</button>
             </div>
-          </section>
+          </div>
         </div>
       </main>
     </div>
@@ -70,13 +68,13 @@
             .replaceAll("'", "&#039;");
 
         const parts = [];
-        if (account) parts.push(`<strong>Аккаунт:</strong> ${safe(account)}`);
-        if (plan) parts.push(`<strong>План:</strong> ${safe(plan)}`);
-        if (tokens) parts.push(`<strong>Токены:</strong> ${safe(tokens)}`);
+        if (account) parts.push(`Аккаунт: ${safe(account)}`);
+        if (plan) parts.push(`План: ${safe(plan)}`);
+        if (tokens) parts.push(`Токены: ${safe(tokens)}`);
 
         if (!parts.length) return;
-        box.style.display = "inline-flex";
-        box.innerHTML = parts.join(' <span aria-hidden="true">·</span> ');
+        box.style.display = "block";
+        box.innerHTML = parts.join(" · ");
       })();
     </script>
     <script>
