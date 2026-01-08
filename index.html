@@ -8,7 +8,7 @@
       name="description"
       content="Покупка премиум токенов для L2 Ludens. Проверь имя аккаунта, выбери количество токенов и перейди к оплате."
     />
-    <link rel="stylesheet" href="./assets/styles.css?v=3" />
+    <link rel="stylesheet" href="./assets/styles.css?v=4" />
   </head>
   <body>
     <div class="wrap">
@@ -68,8 +68,6 @@
             </div>
 
             <section id="tabPremium" class="tabPanel" role="tabpanel" aria-labelledby="tabPremiumBtn" style="margin-top: 16px">
-              <div class="hint">Выбери срок Премиум подписки. Цены подтягиваются автоматически.</div>
-
               <div id="plansStatus" class="hint" style="margin-top: 12px"></div>
               <div id="plansGrid" class="plansGrid" style="margin-top: 12px" aria-label="Планы Премиума">
                 <button type="button" class="planCard" data-plan-code="PREM_7" aria-pressed="false">
@@ -106,7 +104,7 @@
                     type="number"
                     inputmode="numeric"
                     min="1"
-                    max="1000000"
+                    max="500"
                     step="1"
                     value="1"
                   />
@@ -123,7 +121,7 @@
               </div>
 
               <div class="sliderWrap" style="margin-top: 12px">
-                <input id="tokensRange" type="range" min="1" max="1000" step="1" value="1" />
+                <input id="tokensRange" type="range" min="1" max="500" step="1" value="1" />
               </div>
 
               <div class="hint" style="margin-top: 10px">1 Премиум токен = 50 гривен.</div>

@@ -74,6 +74,10 @@ a {
   overflow: hidden;
 }
 
+.card.compact {
+  max-width: 860px;
+}
+
 .header {
   padding: 36px 33px;
   border-bottom: 1px solid var(--border);
@@ -497,6 +501,14 @@ input[type="range"] {
 
 .tabPanel[hidden] {
   display: none;
+}
+
+.measureHidden {
+  position: absolute !important;
+  left: -9999px !important;
+  top: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 .plansGrid {

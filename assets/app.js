@@ -6,7 +6,7 @@
   const PREMIUM_CURRENCY = "UAH";
   const ACCOUNT_STORAGE_KEY = "ludens_pay_account";
 
-  const MAX_TOKENS = 1_000_000;
+  const MAX_TOKENS = 500;
   const MIN_TOKENS = 1;
   const SLIDER_MAX_TOKENS = 500;
   const PRESETS = [10, 50, 100, 500];
@@ -276,6 +276,8 @@
     const plansGrid = $("plansGrid");
     const tabPremiumBtn = $("tabPremiumBtn");
     const tabTokensBtn = $("tabTokensBtn");
+    const premiumPanel = $("tabPremium");
+    const tokensPanel = $("tabTokens");
 
     if (!accountInput || !tokensInput || !tokensRange || !currencySelect || !payBtn || !payPremiumBtn) return;
 
@@ -332,6 +334,36 @@
       setButtonDisabled(payPremiumBtn, !hasAccount || !selectedPlanCode);
     }
 
+    function measurePanelHeight(panel, width) {
+      if (!panel) return 0;
+      if (!panel.hidden) return panel.offsetHeight;
+
+      const prevWidth = panel.style.width;
+      panel.hidden = false;
+      panel.classList.add("measureHidden");
+      panel.style.width = `${width}px`;
+      const height = panel.offsetHeight;
+      panel.classList.remove("measureHidden");
+      panel.style.width = prevWidth;
+      panel.hidden = true;
+      return height;
+    }
+
+    function syncTabPanelHeights() {
+      if (!premiumPanel || !tokensPanel) return;
+      const visiblePanel = premiumPanel.hidden ? tokensPanel : premiumPanel;
+      const width = visiblePanel.getBoundingClientRect().width || 0;
+      if (!width) return;
+
+      const premiumHeight = measurePanelHeight(premiumPanel, width);
+      const tokensHeight = measurePanelHeight(tokensPanel, width);
+      const minHeight = Math.max(premiumHeight, tokensHeight, 0);
+      if (!minHeight) return;
+
+      premiumPanel.style.minHeight = `${minHeight}px`;
+      tokensPanel.style.minHeight = `${minHeight}px`;
+    }
+
     accountInput.addEventListener("input", () => {
       setStoredAccount(accountInput.value.trim());
       updateButtons();
@@ -357,6 +389,7 @@
       plansError = "";
       showPremiumErrors([]);
       renderPlans({ plansByDays, selectedPlanCode, loading: true, errorMessage: "" });
+      syncTabPanelHeights();
 
       try {
         const url = new URL(PREMIUM_PLANS_PATH, BACKEND_BASE);
@@ -386,6 +419,7 @@
       } finally {
         plansLoading = false;
         renderPlans({ plansByDays, selectedPlanCode, loading: false, errorMessage: plansError });
+        syncTabPanelHeights();
         updateButtons();
       }
     }
@@ -402,6 +436,7 @@
 
       selectedPlanCode = planCode;
       renderPlans({ plansByDays, selectedPlanCode, loading: plansLoading, errorMessage: plansError });
+      syncTabPanelHeights();
       updateButtons();
       });
     }
@@ -450,12 +485,19 @@
       const isPremium = setTab(activeTab);
       if (isPremium) void ensurePlansLoaded();
       updateButtons();
+      syncTabPanelHeights();
     }
 
     if (tabPremiumBtn) tabPremiumBtn.addEventListener("click", () => applyTab("premium"));
     if (tabTokensBtn) tabTokensBtn.addEventListener("click", () => applyTab("tokens"));
 
     applyTab(activeTab);
+
+    let resizeTimer = 0;
+    window.addEventListener("resize", () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(syncTabPanelHeights, 80);
+    });
   }
 
   if (document.readyState === "loading") {
