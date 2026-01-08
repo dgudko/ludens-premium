@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Спасибо за поддержку сервера!</title>
+    <title>Спасибо!</title>
     <meta
       name="description"
       content="Спасибо за поддержку L2 Ludens. Где проверить Премиум/токены в игре и где посмотреть историю платежей."
     />
-    <link rel="stylesheet" href="./assets/styles.css?v=4" />
+    <link rel="stylesheet" href="./assets/styles.css?v=5" />
   </head>
   <body>
     <div class="wrap">
@@ -23,9 +23,9 @@
 
         <header class="header">
           <div class="titleRow">
-            <h1 id="pageTitle">Спасибо за поддержку сервера!</h1>
+            <h1 id="pageTitle">Спасибо, что поддерживаешь L2 Ludens</h1>
           </div>
-          <p class="subtitle">Спасибо, что поддерживаешь L2 Ludens. Пусть игра приносит удовольствие!</p>
+          <p class="subtitle">Пусть игра приносит удовольствие!</p>
         </header>
 
         <div class="content" style="grid-template-columns: 1fr">
@@ -38,9 +38,7 @@
 
             <p id="paymentSummary" class="small" style="margin: 14px 0 0; display: none"></p>
 
-            <div class="ctaRow">
-              <button id="closeTabBtn" class="btn inline" type="button">Закрыть вкладку</button>
-            </div>
+            <p style="margin: 20px 0 0; font-weight: 800">Теперь эту вкладку можно закрыть.</p>
           </div>
         </div>
       </main>
@@ -72,16 +70,6 @@
         if (!parts.length) return;
         box.style.display = "block";
         box.innerHTML = parts.join(" · ");
-      })();
-    </script>
-    <script>
-      (() => {
-        const btn = document.getElementById("closeTabBtn");
-        if (!btn) return;
-        btn.addEventListener("click", () => {
-          window.close();
-          btn.textContent = "Можно просто закрыть вкладку";
-        });
       })();
     </script>
   </body>
