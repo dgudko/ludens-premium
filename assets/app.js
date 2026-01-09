@@ -364,10 +364,19 @@
       const width = (container?.getBoundingClientRect().width || premiumPanel.getBoundingClientRect().width || 0);
       if (!width) return;
 
+      const prevPremiumMinHeight = premiumPanel.style.minHeight;
+      const prevTokensMinHeight = tokensPanel.style.minHeight;
+      premiumPanel.style.minHeight = "";
+      tokensPanel.style.minHeight = "";
+
       const premiumHeight = measurePanelHeight(premiumPanel, width);
       const tokensHeight = measurePanelHeight(tokensPanel, width);
       const minHeight = Math.max(premiumHeight, tokensHeight, 0);
-      if (!minHeight) return;
+      if (!minHeight) {
+        premiumPanel.style.minHeight = prevPremiumMinHeight;
+        tokensPanel.style.minHeight = prevTokensMinHeight;
+        return;
+      }
 
       premiumPanel.style.minHeight = `${minHeight}px`;
       tokensPanel.style.minHeight = `${minHeight}px`;

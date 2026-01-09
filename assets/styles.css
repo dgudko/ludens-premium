@@ -503,21 +503,6 @@ input[type="range"] {
   display: none;
 }
 
-.tabPanel {
-  display: flex;
-  flex-direction: column;
-}
-
-.tabPanel .actions {
-  margin-top: auto;
-}
-
-@media (min-width: 520px) {
-  .tabPanel {
-    min-height: 520px;
-  }
-}
-
 .measureHidden {
   position: absolute !important;
   left: -9999px !important;
